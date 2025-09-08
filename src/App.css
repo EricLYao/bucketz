@@ -1,38 +1,372 @@
-.App {
-  text-align: center;
+.app {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+  min-height: 100vh;
 }
 
-.App-logo {
-  height: 40vmin;
+.names-list {
+  flex: 0 0 250px;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  min-height: 200px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.names-list.drag-over {
+  background-color: #e8f4ff;
+  border: 2px dashed #2196f3;
+}
+
+.add-name-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  align-items: center;
+  height: 2.5rem;
+}
+
+.name-input {
+  flex: 1;
+  height: 100%;
+  padding: 0 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  outline: none;
+  background-color: white;
+  transition: all 0.2s ease;
+}
+
+.name-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.add-button {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  width: 2.5rem;
+  height: 100%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+}
+
+.add-button:hover {
+  background-color: #45a049;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.name-item {
+  padding: 0.75rem ;
+  margin: 0.5rem 0;
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: grab;
+  transition: all 0.2s ease;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: #1e293b;
+}
+
+.name-item .delete-button {
+  opacity: 0;
+  transform: translateX(5px);
+}
+
+.name-item:hover .delete-button {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.name-item:hover {
+  background-color: #f8fafc;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+  border-color: #cbd5e1;
+}
+
+.buckets-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+}
+
+.add-bucket-form {
+  padding: 0 1rem;
+}
+
+.add-bucket-form form {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  height: 2.5rem;
+}
+
+.bucket-input {
+  flex: 1;
+  height: 100%;
+  padding: 0 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  outline: none;
+  max-width: 200px;
+}
+
+.bucket-input:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+}
+
+.buckets-container {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.bucket {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  min-height: 200px;
+  padding: 0.5rem;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.bucket::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(59, 130, 246, 0.02));
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.bucket.drag-over {
+  background-color: rgba(59, 130, 246, 0.1);
+  border: 2px dashed #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.bucket-header {
+  width: 100%;
+  padding: 0.25rem;
+  box-sizing: border-box;
+}
+
+.bucket-name {
+  padding: 0.75rem;
+  text-align: center;
+  border-left: 1px solid #e2e8f0;
+  border-right: 1px solid #e2e8f0;
+}
+
+.bucket-icon-section {
+  padding: 0.5rem;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.bucket-delete-section {
+  padding: 0.5rem;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bucket-header .delete-button {
+  opacity: 1;
+  color: #94a3b8;
+}
+
+.bucket-header .delete-button:hover {
+  background-color: #ef4444;
+  color: white;
+  transform: scale(1.05);
+}
+
+.bucket-header h3 {
+  margin: 0;
+  color: #1e293b;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  width: 100%;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 3rem 1fr 3rem;
+  align-items: center;
+}
+
+.bucket-header h3:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  border: 1px solid #3b82f6;
+}
+
+.bucket-edit-form {
+  width: 100%;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  justify-content: center;
+}
+
+.bucket-edit-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  text-align: center;
+  background-color: white;
+  color: #1e293b;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  align-items: center;
+}
+
+.bucket-edit-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  width: 100%;
+}
+
+.bucket-item {
+  padding: 0.75rem;
+  margin: 0.25rem 0;
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: grab;
+  transition: all 0.2s ease;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: #1e293b;
+  position: relative;
+  z-index: 1;
+}
+
+.bucket-item:hover {
+  background-color: #f8fafc;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+  border-color: #cbd5e1;
+}
+
+.item-text {
+  flex: 1;
+}
+
+.delete-button {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.1rem;
+  cursor: pointer;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  line-height: 1;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+  opacity: 0;
+  padding: 0;
+}
+
+.bucket-item:hover .delete-button {
+  opacity: 1;
+}
+
+.delete-button:hover {
+  background-color: #ef4444;
   color: white;
+  transform: scale(1.05);
 }
 
-.App-link {
-  color: #61dafb;
+.bucket-indicator {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin: auto;
+  box-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.1);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.bucket-indicators {
+  position: absolute;
+  right: 2.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  max-width: 120px;
+  pointer-events: none;
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  color: #333;
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* Drag effect styles */
+.name-item:active,
+.bucket-item:active {
+  cursor: grabbing;
+  opacity: 0.8;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
