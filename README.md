@@ -10,13 +10,22 @@ A React application that lets you organize names into buckets using drag and dro
 - Remove names from buckets
 - Color-coded bucket indicators
 
-## Use Cases
+## Development
 
-- Team Assignment: Organizing people into different teams or groups
-- Task Distribution: Assigning tasks to different categories
-- Resource Allocation: Managing resources across different buckets
-- Student Groups: Sorting students into different project groups
-- General Organization: Any scenario requiring visual categorization of names
+```bash
+npm install
+npm start
+```
+
+## Deployment
+
+To deploy to GitHub Pages:
+
+```bash
+npm run deploy
+```
+
+The app will be available at: https://ericlYao.github.io/buckets
 
 ## Future Enhancements
 
