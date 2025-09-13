@@ -72,6 +72,12 @@
   transform: none;
 }
 
+/* Reset expanded styles when there are no buckets */
+.expanded[data-bucket-count="0"] .name-item {
+  border-bottom-color: var(--border-color);
+  border-radius: 8px;
+}
+
 .expand-button {
   background: none;
   border: none;
@@ -109,10 +115,17 @@
   opacity: 0.8;
 }
 
-.name-item .delete-button {
+.delete-button {
   opacity: 0.5;
-  transform: translateX(5px);
   color: black;
+  transition: var(--transition);
+}
+
+.delete-button:hover {
+  background-color: var(--danger-color);
+  color: white;
+  opacity: 1;
+  transform: scale(1.05);
 }
 
 .bucket-list {
@@ -237,13 +250,6 @@
   color: black;
 }
 
-.bucket-header .delete-button:hover {
-  background-color: var(--danger-color);
-  color: white;
-  transform: scale(1.05);
-  opacity: 1;
-}
-
 .bucket-icon-section {
   padding: 0.5rem;
   display: flex;
@@ -291,22 +297,10 @@
   z-index: 1;
 }
 
-.bucket-item .delete-button {
-  opacity: 0.5;
-  transform: translateX(5px);
-  color: black;
-}
-
 .bucket-item:hover {
   background-color: var(--hover-bg);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
-}
-
-.bucket-item .delete-button:hover {
-  background-color: var(--danger-color);
-  color: white;
-  opacity: 1;
 }
 
 /* Bucket Edit Form */

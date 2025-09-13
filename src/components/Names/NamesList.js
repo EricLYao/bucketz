@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import BucketIndicator from '../BucketIndicator/BucketIndicator';
 import '../../styles/common.css';
@@ -17,6 +17,17 @@ const NamesList = ({
   bucketColors
 }) => {
   const [expandedNames, setExpandedNames] = useState([]);
+
+  // Effect to collapse names that no longer have buckets
+  useEffect(() => {
+    setExpandedNames(prev => 
+      prev.filter(name => {
+        // Check if this name has any buckets
+        return Object.values(buckets).some(items => items.includes(name));
+      })
+    );
+  }, [buckets]);
+
   return (
     <div 
       className="names-list"
@@ -54,7 +65,11 @@ const NamesList = ({
         };
         
         return (
-          <div key={name} className={`name-item-container ${isExpanded ? 'expanded' : ''} ${hasAssignments ? 'has-assignments' : ''}`}>
+          <div 
+            key={name} 
+            className={`name-item-container ${isExpanded ? 'expanded' : ''} ${hasAssignments ? 'has-assignments' : ''}`}
+            data-bucket-count={assignedBuckets.length}
+          >
             <div
               className="name-item"
               draggable
