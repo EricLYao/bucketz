@@ -13,7 +13,8 @@ const NamesList = ({
   onDragOver,
   onDragLeave,
   onDrop,
-  buckets
+  buckets,
+  bucketColors
 }) => {
   const [expandedNames, setExpandedNames] = useState([]);
   return (
@@ -84,7 +85,7 @@ const NamesList = ({
                 <div className="bucket-icons-container">
                   {assignedBuckets.map(bucketName => (
                     <div key={bucketName} className="bucket-icon-wrapper" title={bucketName}>
-                      <BucketIndicator bucketName={bucketName} />
+                      <BucketIndicator bucketName={bucketName} color={bucketColors?.[bucketName]} />
                     </div>
                   ))}
                 </div>
@@ -107,7 +108,8 @@ NamesList.propTypes = {
   onDragOver: PropTypes.func.isRequired,
   onDragLeave: PropTypes.func.isRequired,
   onDrop: PropTypes.func.isRequired,
-  buckets: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string)).isRequired
+  buckets: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
+  bucketColors: PropTypes.objectOf(PropTypes.string)
 };
 
 export default NamesList;

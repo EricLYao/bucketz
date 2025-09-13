@@ -1,0 +1,30 @@
+.bucket-icon-section {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.bucket-indicator-wrapper {
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.bucket-indicator-wrapper:hover {
+  transform: scale(1.05);
+}
+
+.bucket-indicator-wrapper:hover .bucket-indicator {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8), 0 0 0 4px rgba(59, 130, 246, 0.3);
+}
+
+.color-picker {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  padding: 0;
+  border: none;
+  pointer-events: none;
+}

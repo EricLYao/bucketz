@@ -20,6 +20,7 @@ function App() {
   const {
     buckets,
     setBuckets,
+    bucketColors,
     newBucketName,
     setNewBucketName,
     editingBucket,
@@ -29,7 +30,8 @@ function App() {
     startEditingBucket,
     handleRenameBucket,
     handleDeleteBucket,
-    handleDeleteFromBucket
+    handleDeleteFromBucket,
+    handleSetBucketColor
   } = useBuckets({
     'Bucket 1': [],
     'Bucket 2': [],
@@ -79,6 +81,7 @@ function App() {
         onDragLeave={handleDragLeave}
         onDrop={handleNamesListDrop}
         buckets={buckets}
+        bucketColors={bucketColors}
       />
       <div className="buckets-section">
         <div className="add-bucket-form">
@@ -101,6 +104,7 @@ function App() {
               key={bucketName}
               name={bucketName}
               items={buckets[bucketName]}
+              color={bucketColors[bucketName]}
               isEditing={editingBucket === bucketName}
               editName={bucketEditName}
               onStartEdit={startEditingBucket}
@@ -112,6 +116,7 @@ function App() {
               onDrop={handleDrop}
               onItemDragStart={handleBucketDragStart}
               onDeleteItem={handleDeleteFromBucket}
+              onColorChange={handleSetBucketColor}
             />
           ))}
         </div>

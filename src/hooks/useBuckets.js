@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 
 export const useBuckets = (initialBuckets = {}) => {
   const [buckets, setBuckets] = useState(initialBuckets);
+  const [bucketColors, setBucketColors] = useState({});
   const [newBucketName, setNewBucketName] = useState('');
   const [editingBucket, setEditingBucket] = useState(null);
   const [bucketEditName, setBucketEditName] = useState('');
@@ -45,6 +46,13 @@ export const useBuckets = (initialBuckets = {}) => {
     });
   }, []);
 
+  const handleSetBucketColor = useCallback((bucketName, color) => {
+    setBucketColors(prev => ({
+      ...prev,
+      [bucketName]: color
+    }));
+  }, []);
+
   const handleDeleteFromBucket = useCallback((bucketName, index) => {
     setBuckets(prev => {
       const newBuckets = { ...prev };
@@ -56,6 +64,7 @@ export const useBuckets = (initialBuckets = {}) => {
   return {
     buckets,
     setBuckets,
+    bucketColors,
     newBucketName,
     setNewBucketName,
     editingBucket,
@@ -65,6 +74,7 @@ export const useBuckets = (initialBuckets = {}) => {
     startEditingBucket,
     handleRenameBucket,
     handleDeleteBucket,
-    handleDeleteFromBucket
+    handleDeleteFromBucket,
+    handleSetBucketColor
   };
 };

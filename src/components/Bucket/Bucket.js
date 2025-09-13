@@ -2,10 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BucketIndicator from '../BucketIndicator/BucketIndicator';
 import '../../styles/common.css';
+import './Bucket.css';
 
 const Bucket = ({
   name,
   items,
+  color,
   isEditing,
   editName,
   onStartEdit,
@@ -16,7 +18,8 @@ const Bucket = ({
   onDragLeave,
   onDrop,
   onItemDragStart,
-  onDeleteItem
+  onDeleteItem,
+  onColorChange
 }) => {
   return (
     <div
@@ -46,7 +49,39 @@ const Bucket = ({
         ) : (
           <h3>
             <div className="bucket-icon-section">
-              <BucketIndicator bucketName={name} />
+              <div 
+                className="bucket-indicator-wrapper" 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const colorInput = e.currentTarget.querySelector('.color-picker');
+                  colorInput.click();
+                }}
+                title="Click to change color"
+              >
+                <BucketIndicator bucketName={name} color={color} />
+                <input
+                  type="color"
+                  ref={(input) => {
+                    if (input) {
+                      const currentColor = color || (() => {
+                        const colors = [
+                          '#3b82f6', '#10b981', '#f59e0b', '#ef4444',
+                          '#8b5cf6', '#ec4899', '#06b6d4', '#f97316'
+                        ];
+                        let hash = 0;
+                        for (let i = 0; i < name.length; i++) {
+                          hash = name.charCodeAt(i) + ((hash << 5) - hash);
+                        }
+                        return colors[Math.abs(hash) % colors.length];
+                      })();
+                      input.value = currentColor;
+                    }
+                  }}
+                  onChange={(e) => onColorChange(name, e.target.value)}
+                  className="color-picker"
+                  aria-label="Change bucket color"
+                />
+              </div>
             </div>
             <div className="bucket-name" onClick={() => onStartEdit(name)}>
               {name}
@@ -90,6 +125,7 @@ const Bucket = ({
 Bucket.propTypes = {
   name: PropTypes.string.isRequired,
   items: PropTypes.arrayOf(PropTypes.string).isRequired,
+  color: PropTypes.string,
   isEditing: PropTypes.bool.isRequired,
   editName: PropTypes.string.isRequired,
   onStartEdit: PropTypes.func.isRequired,
@@ -98,6 +134,7 @@ Bucket.propTypes = {
   onDeleteBucket: PropTypes.func.isRequired,
   onDragOver: PropTypes.func.isRequired,
   onDragLeave: PropTypes.func.isRequired,
+  onColorChange: PropTypes.func.isRequired,
   onDrop: PropTypes.func.isRequired,
   onItemDragStart: PropTypes.func.isRequired,
   onDeleteItem: PropTypes.func.isRequired
