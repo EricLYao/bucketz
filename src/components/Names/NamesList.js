@@ -71,11 +71,28 @@ const NamesList = ({
             key={name} 
             className={`name-item-container ${isExpanded ? 'expanded' : ''} ${hasAssignments ? 'has-assignments' : ''}`}
             data-bucket-count={assignedBuckets.length}
+            draggable
+            onDragStart={(e) => {
+              // Create a clone of just the name-item for the drag image
+              const nameItem = e.currentTarget.querySelector('.name-item');
+              const dragEl = nameItem.cloneNode(true);
+              // Find and update the expand button in the clone
+              const expandButton = dragEl.querySelector('.expand-button');
+              if (expandButton) {
+                expandButton.textContent = '▶';
+              }
+              // Set the clone as the drag image
+              dragEl.style.width = `${nameItem.offsetWidth}px`;
+              document.body.appendChild(dragEl);
+              e.dataTransfer.setDragImage(dragEl, 0, 0);
+              // Clean up the clone after it's no longer needed
+              requestAnimationFrame(() => dragEl.remove());
+              
+              onDragStart(e, name, names.indexOf(name));
+            }}
           >
             <div
               className="name-item"
-              draggable
-              onDragStart={(e) => onDragStart(e, name, names.indexOf(name))}
             >
               <button 
                 className="expand-button"

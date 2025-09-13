@@ -14,18 +14,26 @@
 /* App layout */
 .app {
   display: flex;
-  gap: 2rem;
-  padding: 2rem;
-  max-width: 1200px;
+  gap: clamp(1rem, 3vw, 2rem);
+  padding: clamp(1rem, 3vw, 2rem);
+  max-width: min(95vw, 1200px);
   margin: 0 auto;
 }
+
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+  }
+}
+
 .names-list {
-  flex: 0 0 250px;
-  padding: 1rem;
+  flex: 0 0 min(250px, 100%);
+  padding: clamp(0.75rem, 2vw, 1rem);
   background-color: #fff;
   border-radius: 12px;
   transition: var(--transition);
-  min-height: 200px;
+  min-height: 350px;
+  height: fit-content;
   box-shadow: var(--shadow-md);
   border: 1px solid var(--border-color);
   display: flex;
@@ -92,6 +100,7 @@
 .name-item-container {
   margin: 0.1rem 0;
   transition: var(--transition);
+  cursor: grab;
 }
 
 .name-item {
@@ -221,6 +230,7 @@
   border-top: none;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
+  cursor: grab;
   box-shadow: var(--shadow-sm);
   position: relative;
   top: -1px;
@@ -280,7 +290,8 @@
 .bucket {
   background-color: #fff;
   border-radius: 12px;
-  min-height: 200px;
+  min-height: 250px;
+  height: fit-content;
   padding: 0.5rem;
   transition: var(--transition);
   display: flex;
@@ -398,9 +409,9 @@
 }
 
 .bucket-item {
-  padding: 0.75rem;
-  margin: 0.25rem auto;
-  width: 85%;
+  padding: clamp(0.5rem, 2vw, 0.75rem);
+  margin: clamp(0.15rem, 1vw, 0.25rem) auto;
+  width: min(85%, calc(100% - 1rem));
   background-color: white;
   border: 1px solid var(--border-color);
   border-radius: 8px;
@@ -456,8 +467,8 @@
 
 /* BucketIndicator Styles */
 .bucket-indicator {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: min(1.5rem, 5vw);
+  height: min(1.5rem, 5vw);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -495,11 +506,14 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
 }
 
 .buckets-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1rem;
-  flex: 1;
+  grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr));
+  gap: clamp(0.75rem, 2vw, 1rem);
+  width: 100%;
+  max-width: 100%;
+  align-items: start;
 }
