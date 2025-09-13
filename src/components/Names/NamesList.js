@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import BucketIndicator from '../BucketIndicator/BucketIndicator';
-import '../../styles/common.css';
 
 const NamesList = ({ 
   names, 
@@ -14,9 +13,12 @@ const NamesList = ({
   onDragLeave,
   onDrop,
   buckets,
-  bucketColors
+  bucketColors,
+  onRenameName
 }) => {
   const [expandedNames, setExpandedNames] = useState([]);
+  const [editingName, setEditingName] = useState(null);
+  const [editNameValue, setEditNameValue] = useState('');
 
   // Effect to collapse names that no longer have buckets
   useEffect(() => {
@@ -73,7 +75,7 @@ const NamesList = ({
             <div
               className="name-item"
               draggable
-              onDragStart={(e) => onDragStart(e, name)}
+              onDragStart={(e) => onDragStart(e, name, names.indexOf(name))}
             >
               <button 
                 className="expand-button"
@@ -83,17 +85,54 @@ const NamesList = ({
               >
                 {isExpanded ? "▼" : "▶"}
               </button>
-              <span className="item-text">{name}</span>
-              <span className="bucket-count">
-                {assignedBuckets.length > 0 && `(${assignedBuckets.length})`}
-              </span>
-              <button 
-                className="delete-button"
-                onClick={() => onRemoveName(name)}
-                title="Remove name"
-              >
-                ×
-              </button>
+              {editingName === name ? (
+                <form 
+                  className="name-edit-form"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (editNameValue && editNameValue !== name) {
+                      onRenameName(name, editNameValue);
+                    }
+                    setEditingName(null);
+                  }}
+                >
+                  <input
+                    type="text"
+                    value={editNameValue}
+                    onChange={(e) => setEditNameValue(e.target.value)}
+                    onBlur={() => {
+                      if (editNameValue && editNameValue !== name) {
+                        onRenameName(name, editNameValue);
+                      }
+                      setEditingName(null);
+                    }}
+                    className="name-edit-input"
+                    autoFocus
+                  />
+                </form>
+              ) : (
+                <>
+                  <span 
+                    className="item-text" 
+                    onDoubleClick={() => {
+                      setEditingName(name);
+                      setEditNameValue(name);
+                    }}
+                  >
+                    {name}
+                  </span>
+                  <span className="bucket-count">
+                    {assignedBuckets.length > 0 && `(${assignedBuckets.length})`}
+                  </span>
+                  <button 
+                    className="delete-button"
+                    onClick={() => onRemoveName(name)}
+                    title="Remove name"
+                  >
+                    ×
+                  </button>
+                </>
+              )}
             </div>
             {isExpanded && assignedBuckets.length > 0 && (
               <div className="bucket-list">
@@ -124,7 +163,8 @@ NamesList.propTypes = {
   onDragLeave: PropTypes.func.isRequired,
   onDrop: PropTypes.func.isRequired,
   buckets: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-  bucketColors: PropTypes.objectOf(PropTypes.string)
+  bucketColors: PropTypes.objectOf(PropTypes.string),
+  onRenameName: PropTypes.func.isRequired
 };
 
 export default NamesList;

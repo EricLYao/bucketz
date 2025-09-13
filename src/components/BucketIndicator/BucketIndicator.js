@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import '../../styles/common.css';
 
 const BucketIndicator = ({ bucketName, color }) => {
   // Generate a consistent color based on bucket name

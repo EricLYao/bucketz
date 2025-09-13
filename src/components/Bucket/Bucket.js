@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import BucketIndicator from '../BucketIndicator/BucketIndicator';
-import '../../styles/common.css';
 import './Bucket.css';
 
 const Bucket = ({

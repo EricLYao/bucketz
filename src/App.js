@@ -16,6 +16,20 @@ function App() {
   ]);
   const [newName, setNewName] = useState('');
 
+  const handleRenameName = (oldName, newName) => {
+    // Update name in names list
+    setNames(prev => prev.map(n => n === oldName ? newName : n));
+    
+    // Update name in all buckets
+    setBuckets(prev => {
+      const newBuckets = {};
+      Object.entries(prev).forEach(([bucketName, items]) => {
+        newBuckets[bucketName] = items.map(item => item === oldName ? newName : item);
+      });
+      return newBuckets;
+    });
+  };
+
   // Initialize buckets with custom hook
   const {
     buckets,
@@ -46,7 +60,7 @@ function App() {
     handleBucketDragStart,
     handleDrop,
     handleNamesListDrop
-  } = useDragAndDrop(buckets, setBuckets);
+  } = useDragAndDrop(buckets, setBuckets, names, setNames);
 
   // Names list handlers
   const handleAddName = (e) => {
@@ -82,6 +96,7 @@ function App() {
         onDrop={handleNamesListDrop}
         buckets={buckets}
         bucketColors={bucketColors}
+        onRenameName={handleRenameName}
       />
       <div className="buckets-section">
         <div className="add-bucket-form">
