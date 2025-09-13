@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import BucketIndicator from '../BucketIndicator/BucketIndicator';
 import '../../styles/common.css';
@@ -15,6 +15,7 @@ const NamesList = ({
   onDrop,
   buckets
 }) => {
+  const [expandedNames, setExpandedNames] = useState([]);
   return (
     <div 
       className="names-list"
@@ -35,28 +36,63 @@ const NamesList = ({
           +
         </button>
       </form>
-      {names.map(name => (
-        <div
-          key={name}
-          className="name-item"
-          draggable
-          onDragStart={(e) => onDragStart(e, name)}
-        >
-          <span className="item-text">{name}</span>
-          {Object.entries(buckets).map(([bucketName, items]) => (
-            items.includes(name) && (
-              <BucketIndicator key={bucketName} bucketName={bucketName} />
-            )
-          ))}
-          <button 
-            className="delete-button"
-            onClick={() => onRemoveName(name)}
-            title="Remove name"
-          >
-            ×
-          </button>
-        </div>
-      ))}
+      {names.map(name => {
+        const assignedBuckets = Object.entries(buckets)
+          .filter(([_, items]) => items.includes(name))
+          .map(([bucketName]) => bucketName);
+        const isExpanded = expandedNames.includes(name);
+        const hasAssignments = assignedBuckets.length > 0;
+
+        const toggleExpand = () => {
+          if (!hasAssignments) return;
+          setExpandedNames(prev => 
+            isExpanded 
+              ? prev.filter(n => n !== name)
+              : [...prev, name]
+          );
+        };
+        
+        return (
+          <div key={name} className={`name-item-container ${isExpanded ? 'expanded' : ''} ${hasAssignments ? 'has-assignments' : ''}`}>
+            <div
+              className="name-item"
+              draggable
+              onDragStart={(e) => onDragStart(e, name)}
+            >
+              <button 
+                className="expand-button"
+                onClick={toggleExpand}
+                title={hasAssignments ? (isExpanded ? "Collapse" : "Expand") : "No assignments"}
+                disabled={!hasAssignments}
+              >
+                {isExpanded ? "▼" : "▶"}
+              </button>
+              <span className="item-text">{name}</span>
+              <span className="bucket-count">
+                {assignedBuckets.length > 0 && `(${assignedBuckets.length})`}
+              </span>
+              <button 
+                className="delete-button"
+                onClick={() => onRemoveName(name)}
+                title="Remove name"
+              >
+                ×
+              </button>
+            </div>
+            {isExpanded && assignedBuckets.length > 0 && (
+              <div className="bucket-list">
+                <div className="bucket-icons-container">
+                  {assignedBuckets.map(bucketName => (
+                    <div key={bucketName} className="bucket-icon-wrapper" title={bucketName}>
+                      <BucketIndicator bucketName={bucketName} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };

@@ -9,7 +9,7 @@
   transition: var(--transition);
   min-height: 200px;
   box-shadow: var(--shadow-md);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
 }
 
 .add-name-form {
@@ -37,9 +37,13 @@
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
+.name-item-container {
+  margin: 0.5rem 0;
+  transition: var(--transition);
+}
+
 .name-item {
   padding: 0.75rem;
-  margin: 0.5rem 0;
   background-color: white;
   border: 1px solid var(--border-color);
   border-radius: 8px;
@@ -48,7 +52,6 @@
   user-select: none;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 0.5rem;
   font-size: 0.95rem;
   color: var(--text-color);
@@ -58,13 +61,84 @@
   background-color: var(--hover-bg);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
-  border-color: var(--border-color);
+}
+
+.expanded .name-item {
+  background-color: white;
+  border-bottom-color: transparent;
+  box-shadow: var(--shadow-sm);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  transform: none;
+}
+
+.expand-button {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  padding: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.5;
+  transition: var(--transition);
+  font-size: 0.7rem;
+}
+
+.expand-button:disabled {
+  cursor: default;
+  opacity: 0.25;
+  color: var(--text-color);
+}
+
+.expand-button:not(:disabled):hover {
+  opacity: 1;
+  color: var(--primary-color);
+}
+
+.item-text {
+  flex: 1;
+}
+
+.bucket-count {
+  font-size: 0.8rem;
+  color: var(--primary-color);
+  opacity: 0.8;
 }
 
 .name-item .delete-button {
   opacity: 0.5;
   transform: translateX(5px);
   color: black;
+}
+
+.bucket-list {
+  background-color: white;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-top: none;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  top: -1px;
+}
+
+.bucket-icons-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.bucket-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: help;
 }
 
 .name-item .delete-button:hover {
@@ -113,7 +187,7 @@
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-md);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
   position: relative;
   overflow: hidden;
 }
