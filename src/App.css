@@ -1,27 +1,15 @@
-.app {
-  display: flex;
-  gap: 2rem;
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
-  min-height: 100vh;
-}
+@import './styles/common.css';
 
+/* NamesList Styles */
 .names-list {
   flex: 0 0 250px;
   padding: 1rem;
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 12px;
-  transition: all 0.2s ease;
+  transition: var(--transition);
   min-height: 200px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-md);
   border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.names-list.drag-over {
-  background-color: #e8f4ff;
-  border: 2px dashed #2196f3;
 }
 
 .add-name-form {
@@ -36,84 +24,59 @@
   flex: 1;
   height: 100%;
   padding: 0 0.75rem;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   font-size: 0.9rem;
   outline: none;
   background-color: white;
-  transition: all 0.2s ease;
+  transition: var(--transition);
 }
 
 .name-input:focus {
-  border-color: #3b82f6;
+  border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.add-button {
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  width: 2.5rem;
-  height: 100%;
-  font-size: 1.2rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
-}
-
-.add-button:hover {
-  background-color: #45a049;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
 .name-item {
-  padding: 0.75rem ;
+  padding: 0.75rem;
   margin: 0.5rem 0;
   background-color: white;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   cursor: grab;
-  transition: all 0.2s ease;
+  transition: var(--transition);
   user-select: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
   font-size: 0.95rem;
-  color: #1e293b;
-}
-
-.name-item .delete-button {
-  opacity: 0;
-  transform: translateX(5px);
-}
-
-.name-item:hover .delete-button {
-  opacity: 1;
-  transform: translateX(0);
+  color: var(--text-color);
 }
 
 .name-item:hover {
-  background-color: #f8fafc;
+  background-color: var(--hover-bg);
   transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-  border-color: #cbd5e1;
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-color);
 }
 
-.buckets-section {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  flex: 1;
+.name-item .delete-button {
+  opacity: 0.5;
+  transform: translateX(5px);
+  color: black;
 }
 
+.name-item .delete-button:hover {
+  background-color: var(--danger-color);
+  color: white;
+  opacity: 1;
+}
+
+/* Add Bucket Form */
 .add-bucket-form {
   padding: 0 1rem;
+  margin-bottom: 1rem;
 }
 
 .add-bucket-form form {
@@ -127,33 +90,29 @@
   flex: 1;
   height: 100%;
   padding: 0 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
   font-size: 0.9rem;
   outline: none;
   max-width: 200px;
+  transition: var(--transition);
 }
 
 .bucket-input:focus {
-  border-color: #4CAF50;
-  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.buckets-container {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(3, 1fr);
-}
-
+/* Bucket Styles */
 .bucket {
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 12px;
   min-height: 200px;
   padding: 0.5rem;
-  transition: all 0.2s ease;
+  transition: var(--transition);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-md);
   border: 1px solid rgba(0, 0, 0, 0.1);
   position: relative;
   overflow: hidden;
@@ -170,62 +129,22 @@
   pointer-events: none;
 }
 
-.bucket.drag-over {
-  background-color: rgba(59, 130, 246, 0.1);
-  border: 2px dashed #3b82f6;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-}
-
 .bucket-header {
   width: 100%;
   padding: 0.25rem;
   box-sizing: border-box;
 }
 
-.bucket-name {
-  padding: 0.75rem;
-  text-align: center;
-  border-left: 1px solid #e2e8f0;
-  border-right: 1px solid #e2e8f0;
-}
-
-.bucket-icon-section {
-  padding: 0.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
-
-.bucket-delete-section {
-  padding: 0.5rem;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.bucket-header .delete-button {
-  opacity: 1;
-  color: #94a3b8;
-}
-
-.bucket-header .delete-button:hover {
-  background-color: #ef4444;
-  color: white;
-  transform: scale(1.05);
-}
-
 .bucket-header h3 {
   margin: 0;
-  color: #1e293b;
+  color: var(--text-color);
   cursor: pointer;
   border-radius: 0.5rem;
   width: 100%;
   font-size: 0.95rem;
-  transition: all 0.2s ease;
+  transition: var(--transition);
   background-color: white;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border-color);
   box-sizing: border-box;
   display: grid;
   grid-template-columns: 3rem 1fr 3rem;
@@ -234,10 +153,81 @@
 
 .bucket-header h3:hover {
   background-color: rgba(59, 130, 246, 0.1);
-  color: #3b82f6;
-  border: 1px solid #3b82f6;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
 }
 
+.bucket-header .delete-button {
+  opacity: 0.5;
+  color: black;
+}
+
+.bucket-header .delete-button:hover {
+  background-color: var(--danger-color);
+  color: white;
+  transform: scale(1.05);
+  opacity: 1;
+}
+
+.bucket-icon-section {
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bucket-name {
+  padding: 0.75rem;
+  text-align: center;
+  border-left: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+}
+
+.bucket-delete-section {
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bucket-item {
+  padding: 0.75rem;
+  margin: 0.25rem 0;
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  cursor: grab;
+  transition: var(--transition);
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--text-color);
+  position: relative;
+  z-index: 1;
+}
+
+.bucket-item .delete-button {
+  opacity: 0.5;
+  transform: translateX(5px);
+  color: black;
+}
+
+.bucket-item:hover {
+  background-color: var(--hover-bg);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.bucket-item .delete-button:hover {
+  background-color: var(--danger-color);
+  color: white;
+  opacity: 1;
+}
+
+/* Bucket Edit Form */
 .bucket-edit-form {
   width: 100%;
   padding: 0.5rem;
@@ -248,84 +238,22 @@
 .bucket-edit-input {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 0.95rem;
   outline: none;
   text-align: center;
   background-color: white;
-  color: #1e293b;
-  transition: all 0.2s ease;
-  box-sizing: border-box;
-  display: grid;
-  grid-template-columns: 60px 1fr;
-  align-items: center;
+  color: var(--text-color);
+  transition: var(--transition);
 }
 
 .bucket-edit-input:focus {
-  border-color: #3b82f6;
+  border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-  width: 100%;
 }
 
-.bucket-item {
-  padding: 0.75rem;
-  margin: 0.25rem 0;
-  background-color: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  cursor: grab;
-  transition: all 0.2s ease;
-  user-select: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  font-size: 0.95rem;
-  color: #1e293b;
-  position: relative;
-  z-index: 1;
-}
-
-.bucket-item:hover {
-  background-color: #f8fafc;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-  border-color: #cbd5e1;
-}
-
-.item-text {
-  flex: 1;
-}
-
-.delete-button {
-  background: none;
-  border: none;
-  color: #94a3b8;
-  font-size: 1.1rem;
-  cursor: pointer;
-  width: 1.75rem;
-  height: 1.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-  border-radius: 0.375rem;
-  transition: all 0.2s ease;
-  opacity: 0;
-  padding: 0;
-}
-
-.bucket-item:hover .delete-button {
-  opacity: 1;
-}
-
-.delete-button:hover {
-  background-color: #ef4444;
-  color: white;
-  transform: scale(1.05);
-}
-
+/* BucketIndicator Styles */
 .bucket-indicator {
   width: 1.5rem;
   height: 1.5rem;
@@ -354,19 +282,10 @@
   pointer-events: none;
 }
 
-h2 {
-  margin-top: 0;
-  margin-bottom: 0.75rem;
-  color: #333;
-  text-align: center;
-  font-size: 1.25rem;
-  font-weight: 600;
-}
-
-/* Drag effect styles */
+/* Active State Styles */
 .name-item:active,
 .bucket-item:active {
   cursor: grabbing;
   opacity: 0.8;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-md);
 }

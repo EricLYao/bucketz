@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import NamesList from './components/NamesList';
-import Bucket from './components/Bucket';
+import NamesList from './components/Names/NamesList';
+import Bucket from './components/Bucket/Bucket';
 import { useDragAndDrop } from './hooks/useDragAndDrop';
 import { useBuckets } from './hooks/useBuckets';
 import './App.css';
