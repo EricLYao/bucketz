@@ -221,8 +221,9 @@
   border: 1px solid var(--border-color);
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: 3rem 1fr 3rem;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
+  min-height: 3rem;
 }
 
 .bucket-header h3:hover {
@@ -248,13 +249,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  min-width: 2.5rem;
 }
 
 .bucket-name {
-  padding: 0.75rem;
+  padding: 0.5rem;
   text-align: center;
   border-left: 1px solid var(--border-color);
   border-right: 1px solid var(--border-color);
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+  min-width: 0;
+  line-height: 1.2;
 }
 
 .bucket-delete-section {
@@ -262,6 +269,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  min-width: 2.5rem;
 }
 
 .bucket-item {
