@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import NamesList from './components/Names/NamesList';
 import Bucket from './components/Bucket/Bucket';
 import { useDragAndDrop } from './hooks/useDragAndDrop';
@@ -6,15 +6,23 @@ import { useBuckets } from './hooks/useBuckets';
 import './App.css';
 
 function App() {
-  // Names state
-  const [names, setNames] = useState([
+  // Load saved names from localStorage or use defaults
+  const initialNames = JSON.parse(localStorage.getItem('names')) || [
     'John Smith',
     'Emma Wilson',
     'Michael Brown',
     'Sarah Davis',
     'James Miller'
-  ]);
+  ];
+
+  // Names state
+  const [names, setNames] = useState(initialNames);
   const [newName, setNewName] = useState('');
+
+  // Save names to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('names', JSON.stringify(names));
+  }, [names]);
 
   const handleRenameName = (oldName, newName) => {
     // Update name in names list

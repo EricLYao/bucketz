@@ -1,9 +1,22 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 export const useBuckets = (initialBuckets = {}) => {
-  const [buckets, setBuckets] = useState(initialBuckets);
-  const [bucketColors, setBucketColors] = useState({});
+  // Load saved data from localStorage or use defaults
+  const savedBuckets = JSON.parse(localStorage.getItem('buckets'));
+  const savedColors = JSON.parse(localStorage.getItem('bucketColors'));
+
+  const [buckets, setBuckets] = useState(savedBuckets || initialBuckets);
+  const [bucketColors, setBucketColors] = useState(savedColors || {});
   const [newBucketName, setNewBucketName] = useState('');
+
+  // Save buckets and colors to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('buckets', JSON.stringify(buckets));
+  }, [buckets]);
+
+  useEffect(() => {
+    localStorage.setItem('bucketColors', JSON.stringify(bucketColors));
+  }, [bucketColors]);
   const [editingBucket, setEditingBucket] = useState(null);
   const [bucketEditName, setBucketEditName] = useState('');
 
