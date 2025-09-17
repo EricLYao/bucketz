@@ -39,10 +39,11 @@ function App() {
     },
   };
 
-  // Load saved tabs from localStorage or create a default tab
-  const loadSavedTabs = () => {
+  // Load saved tabs and activeTabId from localStorage or create a default tab
+  const loadSavedTabsAndActiveTab = () => {
     try {
       const savedTabs = JSON.parse(localStorage.getItem('tabs'));
+      const savedActiveTabId = localStorage.getItem('activeTabId');
       if (savedTabs && Object.keys(savedTabs).length > 0) {
         // Ensure each tab has its own deep copy of the data
         const restoredTabs = {};
@@ -54,7 +55,6 @@ function App() {
             validatedBuckets[bucketName] = Array.isArray(items) ? 
               items.filter(item => typeof item === 'string') : [];
           });
-          
           // Validate colors
           const validatedColors = {};
           Object.entries(tabData.bucketColors || {}).forEach(([bucketName, color]) => {
@@ -66,7 +66,6 @@ function App() {
               validatedColors[bucketName] = BUCKET_COLORS[index];
             }
           });
-          
           // Ensure all buckets have corresponding colors
           Object.keys(validatedBuckets).forEach(bucketName => {
             if (!validatedColors[bucketName]) {
@@ -74,7 +73,6 @@ function App() {
               validatedColors[bucketName] = BUCKET_COLORS[index];
             }
           });
-          
           restoredTabs[tabId] = {
             label: typeof tabData.label === 'string' ? tabData.label : `Tab ${Object.keys(restoredTabs).length + 1}`,
             names: Array.isArray(tabData.names) ? 
@@ -84,15 +82,16 @@ function App() {
             bucketColors: validatedColors
           };
         });
-        
         if (Object.keys(restoredTabs).length > 0) {
-          return restoredTabs;
+          // If savedActiveTabId is missing or deleted, fallback to first tab
+          const firstTabId = Object.keys(restoredTabs)[0];
+          const activeTabId = (savedActiveTabId && restoredTabs[savedActiveTabId]) ? savedActiveTabId : firstTabId;
+          return { tabs: restoredTabs, activeTabId };
         }
       }
     } catch (error) {
       console.error('Error loading saved tabs:', error);
     }
-
     // Create default tab if no saved tabs exist or on error
     const defaultTabId = uuidv4();
     const defaultTabs = {
@@ -103,14 +102,13 @@ function App() {
         bucketColors: { ...defaultTabData.bucketColors }
       }
     };
-    return defaultTabs;
+    return { tabs: defaultTabs, activeTabId: defaultTabId };
   };
 
 
   // --- State Management ---
   // Tabs and active tab
-  const initialTabs = loadSavedTabs();
-  const initialTabId = Object.keys(initialTabs)[0];
+  const { tabs: initialTabs, activeTabId: initialTabId } = loadSavedTabsAndActiveTab();
   const [tabs, setTabs] = useState(initialTabs);
   const [activeTabId, setActiveTabId] = useState(initialTabId);
   const [newName, setNewName] = useState('');
@@ -119,6 +117,13 @@ function App() {
   useEffect(() => {
     localStorage.setItem('tabs', JSON.stringify(tabs));
   }, [tabs]);
+
+  // Persist activeTabId to localStorage on change
+  useEffect(() => {
+    if (activeTabId) {
+      localStorage.setItem('activeTabId', activeTabId);
+    }
+  }, [activeTabId]);
 
   // --- Tab Management Functions ---
   // Add a new tab with default data
