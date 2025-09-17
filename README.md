@@ -25,7 +25,7 @@ To deploy to GitHub Pages:
 npm run deploy
 ```
 
-The app will be available at: https://ericlYao.github.io/bucketz
+The app will be available at: https://ericlyao.github.io/bucketz
 
 ## Future Enhancements
 
