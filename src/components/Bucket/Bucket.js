@@ -100,7 +100,7 @@ const Bucket = ({
           </h3>
         )}
       </div>
-      {items.map((item, index) => (
+      {Array.isArray(items) && items.map((item, index) => (
         <div
           key={`${name}-${index}`}
           className="bucket-item"

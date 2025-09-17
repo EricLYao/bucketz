@@ -25,7 +25,7 @@ const NamesList = ({
     setExpandedNames(prev => 
       prev.filter(name => {
         // Check if this name has any buckets
-        return Object.values(buckets).some(items => items.includes(name));
+        return Object.values(buckets).some(items => Array.isArray(items) && items.includes(name));
       })
     );
   }, [buckets]);
@@ -52,7 +52,7 @@ const NamesList = ({
       </form>
       {names.map(name => {
         const assignedBuckets = Object.entries(buckets)
-          .filter(([_, items]) => items.includes(name))
+          .filter(([_, items]) => Array.isArray(items) && items.includes(name))
           .map(([bucketName]) => bucketName);
         const isExpanded = expandedNames.includes(name);
         const hasAssignments = assignedBuckets.length > 0;
@@ -84,7 +84,12 @@ const NamesList = ({
               // Set the clone as the drag image
               dragEl.style.width = `${nameItem.offsetWidth}px`;
               document.body.appendChild(dragEl);
-              e.dataTransfer.setDragImage(dragEl, 0, 0);
+              // Calculate the mouse position relative to the drag element
+              const rect = nameItem.getBoundingClientRect();
+              const offsetX = e.clientX - rect.left;
+              const offsetY = e.clientY - rect.top;
+              // Set the drag image with the correct offset
+              e.dataTransfer.setDragImage(dragEl, offsetX, offsetY);
               // Clean up the clone after it's no longer needed
               requestAnimationFrame(() => dragEl.remove());
               
