@@ -10,7 +10,10 @@ const TabManager = ({
   onRemoveTab, 
   onRenameTab, 
   onBatchAddNames,
-  onBatchAddBuckets
+  onBatchAddBuckets,
+  onExport,
+  onImport,
+  onOpenImportExport
 }) => {
   const [editingTab, setEditingTab] = useState(null);
   const [editTabName, setEditTabName] = useState('');
@@ -114,6 +117,15 @@ const TabManager = ({
             <span className="tab-batch-icon">🗂️</span>
             <span className="tab-batch-label">Batch Add Buckets</span>
           </button>
+          <button
+            type="button"
+            className="tab-batch-btn tab-batch-importexport"
+            title="Import/Export"
+            onClick={onOpenImportExport}
+          >
+            <span className="tab-batch-icon">🔄</span>
+            <span className="tab-batch-label">Import / Export</span>
+          </button>
         </div>
       </div>
     </div>
@@ -133,7 +145,10 @@ TabManager.propTypes = {
   onRemoveTab: PropTypes.func.isRequired,
   onRenameTab: PropTypes.func.isRequired,
   onBatchAddNames: PropTypes.func.isRequired,
-  onBatchAddBuckets: PropTypes.func.isRequired
+  onBatchAddBuckets: PropTypes.func.isRequired,
+  onExport: PropTypes.func.isRequired,
+  onImport: PropTypes.func.isRequired,
+  onOpenImportExport: PropTypes.func.isRequired
 };
 
 export default TabManager;

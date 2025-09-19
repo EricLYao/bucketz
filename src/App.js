@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import BatchInputOverlay from './components/BatchInputOverlay';
+import BatchInputOverlay from './components/Overlays/BatchInputOverlay';
 import { v4 as uuidv4 } from 'uuid';
 import NamesList from './components/Names/NamesList';
 import Bucket from './components/Bucket/Bucket';
 import TabManager from './components/TabManager/TabManager';
+import ImportExportOverlay from './components/Overlays/ImportExportOverlay';
 import './App.css';
 
 // Predefined set of distinct colors for buckets
@@ -23,6 +24,8 @@ function App() {
   const [batchOverlayOpen, setBatchOverlayOpen] = useState(false);
   const [batchType, setBatchType] = useState(null); // 'names' or 'buckets'
   const [batchInput, setBatchInput] = useState('');
+  // Import/Export overlay state
+  const [importExportOverlayOpen, setImportExportOverlayOpen] = useState(false);
   // Default data for a new tab
   const defaultTabData = {
     names: [
@@ -518,12 +521,6 @@ function App() {
   };
 
   // Batch add logic
-  const openBatchOverlay = (type) => {
-    setBatchType(type);
-    setBatchInput('');
-    setBatchOverlayOpen(true);
-  };
-
   const closeBatchOverlay = () => {
     setBatchOverlayOpen(false);
     setBatchType(null);
@@ -587,22 +584,84 @@ function App() {
     });
   };
 
+  // Import/Export handlers
+  const handleExport = (scope) => {
+    let exportData, filename;
+    if (scope === 'current') {
+      exportData = JSON.stringify(tabs[activeTabId], null, 2);
+      filename = `${tabs[activeTabId].label.replace(/\s+/g, '_')}_data.txt`;
+    } else {
+      exportData = JSON.stringify(tabs, null, 2);
+      filename = `all_tabs_data.txt`;
+    }
+    const blob = new Blob([exportData], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleImport = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const imported = JSON.parse(e.target.result);
+        if (imported && typeof imported === 'object' && !Array.isArray(imported) && Object.values(imported)[0]?.names) {
+          // Importing multiple tabs: merge, avoid duplicate labels
+          setTabs(prev => {
+            const newTabs = { ...prev };
+            Object.entries(imported).forEach(([tabId, tabData]) => {
+              // Avoid duplicate tab labels
+              const labelExists = Object.values(newTabs).some(tab => tab.label === tabData.label);
+              if (!labelExists) {
+                newTabs[tabId] = tabData;
+              }
+            });
+            return newTabs;
+          });
+        } else if (imported && imported.names) {
+          // Importing a single tab: avoid duplicate label
+          setTabs(prev => {
+            const labelExists = Object.values(prev).some(tab => tab.label === imported.label);
+            if (labelExists) return prev;
+            const newTabId = uuidv4();
+            return { ...prev, [newTabId]: imported };
+          });
+        }
+      } catch (err) {
+        alert('Invalid file format.');
+      }
+    };
+    reader.readAsText(file);
+  };
+
+
   // State synchronization is handled by the effect above
 
   return (
     <div className="app">
-      <TabManager 
-        tabs={Object.entries(tabs || {}).map(([id, data]) => ({
-          id,
-          label: data.label
-        }))}
+      <TabManager
+        tabs={Object.entries(tabs).map(([id, tab]) => ({ id, label: tab.label }))}
         activeTabId={activeTabId}
         onTabSelect={setActiveTabId}
         onAddTab={handleAddTab}
         onRemoveTab={handleRemoveTab}
         onRenameTab={handleRenameTab}
-        onBatchAddNames={() => openBatchOverlay('names')}
-        onBatchAddBuckets={() => openBatchOverlay('buckets')}
+        onBatchAddNames={() => {
+          setBatchType('names');
+          setBatchOverlayOpen(true);
+        }}
+        onBatchAddBuckets={() => {
+          setBatchType('buckets');
+          setBatchOverlayOpen(true);
+        }}
+        onExport={handleExport}
+        onImport={handleImport}
+        onOpenImportExport={() => setImportExportOverlayOpen(true)}
       />
       <BatchInputOverlay
         open={batchOverlayOpen}
@@ -612,6 +671,13 @@ function App() {
         onChange={setBatchInput}
         onConfirm={handleBatchConfirm}
         onCancel={closeBatchOverlay}
+      />
+      <ImportExportOverlay
+        open={importExportOverlayOpen}
+        onExportCurrent={() => { handleExport('current'); setImportExportOverlayOpen(false); }}
+        onExportAll={() => { handleExport('all'); setImportExportOverlayOpen(false); }}
+        onImport={e => { handleImport(e); setImportExportOverlayOpen(false); }}
+        onCancel={() => setImportExportOverlayOpen(false)}
       />
       {activeTab && (
         <div className="tab-content">
@@ -669,6 +735,13 @@ function App() {
           </div>
         </div>
       )}
+      <input
+        type="file"
+        accept=".txt"
+        onChange={handleImport}
+        style={{ display: 'none' }}
+        id="file-input"
+      />
     </div>
   );
 }

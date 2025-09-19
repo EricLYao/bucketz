@@ -1,0 +1,40 @@
+.importexport-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-bottom: 1.2rem;
+}
+.importexport-btn {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.38rem 0.85rem;
+  font-size: 0.98rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.10);
+  cursor: pointer;
+  transition: background 0.18s, transform 0.18s;
+  outline: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+}
+.importexport-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px) scale(1.03);
+}
+.importexport-description {
+  margin-bottom: 1rem;
+  font-size: 0.97rem;
+  color: var(--text-color, #222);
+}
+.importexport-description ul {
+  margin: 0;
+  padding-left: 1.2em;
+}
+.importexport-description li {
+  margin-bottom: 0.3em;
+  line-height: 1.5;
+}
