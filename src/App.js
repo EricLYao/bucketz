@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import BatchInputOverlay from './components/BatchInputOverlay';
 import { v4 as uuidv4 } from 'uuid';
 import NamesList from './components/Names/NamesList';
 import Bucket from './components/Bucket/Bucket';
@@ -18,6 +19,10 @@ export const BUCKET_COLORS = [
 ];
 
 function App() {
+  // Batch input overlay state
+  const [batchOverlayOpen, setBatchOverlayOpen] = useState(false);
+  const [batchType, setBatchType] = useState(null); // 'names' or 'buckets'
+  const [batchInput, setBatchInput] = useState('');
   // Default data for a new tab
   const defaultTabData = {
     names: [
@@ -502,6 +507,7 @@ function App() {
     }
   };
 
+
   // Names list handlers
   const handleAddName = (e) => {
     e.preventDefault();
@@ -509,6 +515,51 @@ function App() {
       setNames(prev => [...prev, newName.trim()]);
       setNewName('');
     }
+  };
+
+  // Batch add logic
+  const openBatchOverlay = (type) => {
+    setBatchType(type);
+    setBatchInput('');
+    setBatchOverlayOpen(true);
+  };
+
+  const closeBatchOverlay = () => {
+    setBatchOverlayOpen(false);
+    setBatchType(null);
+    setBatchInput('');
+  };
+
+  const handleBatchConfirm = () => {
+    const lines = batchInput
+      .split(/\r?\n/)
+      .map(line => line.trim())
+      .filter(line => line.length > 0);
+    if (batchType === 'names') {
+      // Only add names that are not already present
+      setNames(prev => {
+        const existing = new Set(prev);
+        return [...prev, ...lines.filter(name => !existing.has(name))];
+      });
+    } else if (batchType === 'buckets') {
+      setTabs(prev => {
+        const updatedTab = { ...prev[activeTabId] };
+        const existingBuckets = new Set(Object.keys(updatedTab.buckets));
+        let colorIndex = Object.keys(updatedTab.bucketColors).length;
+        lines.forEach(bucketName => {
+          if (!existingBuckets.has(bucketName)) {
+            updatedTab.buckets[bucketName] = [];
+            updatedTab.bucketColors[bucketName] = BUCKET_COLORS[colorIndex % BUCKET_COLORS.length];
+            colorIndex++;
+          }
+        });
+        return {
+          ...prev,
+          [activeTabId]: updatedTab
+        };
+      });
+    }
+    closeBatchOverlay();
   };
 
   const handleRemoveName = (nameToRemove) => {
@@ -550,6 +601,17 @@ function App() {
         onAddTab={handleAddTab}
         onRemoveTab={handleRemoveTab}
         onRenameTab={handleRenameTab}
+        onBatchAddNames={() => openBatchOverlay('names')}
+        onBatchAddBuckets={() => openBatchOverlay('buckets')}
+      />
+      <BatchInputOverlay
+        open={batchOverlayOpen}
+        title={batchType === 'names' ? 'Batch Add Names' : batchType === 'buckets' ? 'Batch Add Buckets' : ''}
+        placeholder={batchType === 'names' ? 'Enter one name per line...' : 'Enter one bucket name per line...'}
+        value={batchInput}
+        onChange={setBatchInput}
+        onConfirm={handleBatchConfirm}
+        onCancel={closeBatchOverlay}
       />
       {activeTab && (
         <div className="tab-content">

@@ -1,3 +1,76 @@
+.tab-bar-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+.tab-batch-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-left: 1rem;
+  flex-shrink: 0;
+}
+.tab-batch-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.22rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.10);
+  cursor: pointer;
+  transition: background 0.18s, transform 0.18s;
+  outline: none;
+}
+.tab-batch-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px) scale(1.03);
+}
+.tab-batch-icon {
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+}
+.tab-batch-label {
+  font-size: 0.98rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+@media (max-width: 600px) {
+  .tab-bar-row {
+    flex-wrap: wrap;
+  }
+  .tabs-list {
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: thin;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .tab-batch-buttons {
+    margin-left: 0.5rem;
+    gap: 0.3rem;
+    flex-shrink: 0;
+  }
+  .tab-batch-btn {
+    padding: 0.7rem 0.7rem;
+    font-size: 1.08rem;
+    border-radius: 2rem;
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .tab-batch-label {
+    display: none;
+  }
+  .tab-batch-icon {
+    font-size: 1.3rem;
+  }
+}
 .tab-manager {
   width: 100%;
   margin-bottom: 1rem;
@@ -8,16 +81,23 @@
   gap: 0.25rem;
   padding: 0.25rem;
   border-bottom: 1px solid var(--border-color);
+  overflow-x: auto;
+  white-space: nowrap;
+  align-items: center;
+  scrollbar-width: thin;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .tab {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
   background-color: var(--hover-bg);
   border: 1px solid var(--border-color);
   border-radius: 6px 6px 0 0;
   overflow: hidden;
+  flex-shrink: 0;
+  padding-right: 0.4rem;
 }
 
 .tab.active {
@@ -53,12 +133,15 @@
   font-size: 1.2rem;
   color: var(--text-color);
   opacity: 0.5;
+  margin-right: 0.1rem;
+  border-radius: 50%;
   transition: var(--transition);
 }
 
 .tab-close-button:hover {
   opacity: 1;
   color: var(--danger-color);
+  background: rgba(220, 38, 38, 0.12); /* translucent red square */
 }
 
 .add-tab-button {

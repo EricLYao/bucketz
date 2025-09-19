@@ -14,7 +14,8 @@ const NamesList = ({
   onDrop,
   buckets,
   bucketColors,
-  onRenameName
+  onRenameName,
+  batchAddButton
 }) => {
   const [expandedNames, setExpandedNames] = useState([]);
   const [editingName, setEditingName] = useState(null);
@@ -38,7 +39,7 @@ const NamesList = ({
       onDrop={onDrop}
     >
       <h2>Names</h2>
-      <form onSubmit={onAddName} className="add-name-form">
+      <form onSubmit={onAddName} className="add-name-form" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <input
           type="text"
           value={newName}
@@ -49,6 +50,7 @@ const NamesList = ({
         <button type="submit" className="add-button" title="Add name">
           +
         </button>
+        {batchAddButton}
       </form>
       {names.map(name => {
         const assignedBuckets = Object.entries(buckets)
@@ -186,7 +188,8 @@ NamesList.propTypes = {
   onDrop: PropTypes.func.isRequired,
   buckets: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
   bucketColors: PropTypes.objectOf(PropTypes.string),
-  onRenameName: PropTypes.func.isRequired
+  onRenameName: PropTypes.func.isRequired,
+  batchAddButton: PropTypes.node
 };
 
 export default NamesList;
